@@ -1,7 +1,7 @@
 /* Subscription Hub — service worker
    Precaches the whole app shell so it runs fully offline.
    Bump CACHE version whenever you change any cached file. */
-const CACHE = 'subhub-v1';
+const CACHE = 'subhub-v2';
 
 const ASSETS = [
   './',

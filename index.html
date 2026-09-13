@@ -258,6 +258,43 @@ textarea{resize:vertical;min-height:62px;}
 .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);z-index:80;background:var(--text);color:var(--surface);padding:12px 18px;border-radius:999px;font-size:.88rem;font-weight:600;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:90vw;text-align:center;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* ---------- Tabs ---------- */
+nav.tabs{max-width:var(--maxw);margin:0 auto;display:flex;gap:8px;padding:14px 16px 0;}
+nav.tabs button{flex:1;border:1px solid var(--border);background:var(--surface);color:var(--muted);padding:11px;border-radius:999px;font-weight:600;font-size:.92rem;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow);}
+nav.tabs button svg{width:17px;height:17px;}
+nav.tabs button.on{background:var(--header);color:#fff;border-color:transparent;}
+[hidden]{display:none!important;}
+
+/* ---------- Credit cards ---------- */
+.cardtile{padding:0;overflow:hidden;display:flex;flex-direction:column;}
+.cc{position:relative;aspect-ratio:1.62/1;padding:16px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;background:var(--cc);}
+.cc[data-net=amex]{--cc:linear-gradient(135deg,#1f7ae0 0%,#0f9ea0 100%);}
+.cc[data-net=visa]{--cc:linear-gradient(135deg,#141a63 0%,#2a3aa0 55%,#e6b325 130%);}
+.cc[data-net=mastercard]{--cc:linear-gradient(135deg,#b02a1e 0%,#eb001b 42%,#f79e1b 105%);}
+.cc[data-net=other]{--cc:linear-gradient(135deg,#334155 0%,#64748b 100%);}
+.cc::after{content:"";position:absolute;inset:0;background:radial-gradient(120px 120px at 85% 15%,rgba(255,255,255,.18),transparent 70%);pointer-events:none;}
+.cc>*{position:relative;z-index:1;}
+.cc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.cc-nick{font-weight:700;font-size:1.02rem;line-height:1.15;text-shadow:0 1px 3px rgba(0,0,0,.28);max-width:64%;}
+.cc-net{font-weight:800;font-style:italic;letter-spacing:.5px;font-size:1.02rem;text-shadow:0 1px 2px rgba(0,0,0,.25);}
+.cc-net.mc{font-style:normal;display:flex;align-items:center;gap:-8px;}
+.cc-net .mcd{width:20px;height:20px;border-radius:50%;display:inline-block;}
+.cc-net .mcd.r{background:#ff5f56;}.cc-net .mcd.y{background:#f9b515;margin-left:-9px;mix-blend-mode:screen;}
+.cc-chip{width:40px;height:29px;border-radius:6px;background:linear-gradient(135deg,#fbe8a6,#c9a13c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.45),inset 0 -6px 8px rgba(0,0,0,.12);}
+.cc-num{font-size:1.05rem;letter-spacing:2.5px;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.28);}
+.cc-bot{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;}
+.cc-bot small{display:block;opacity:.78;font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;}
+.cc-bot b{font-weight:600;}
+.cc-details{display:flex;flex-wrap:wrap;gap:6px;padding:12px 12px 2px;}
+.cc-details .badge.warn{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent);}
+.cc-details .badge.danger{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 40%,transparent);}
+.cc-details .badge.link{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 34%,transparent);}
+.cardtile .actions{display:flex;gap:8px;padding:10px 12px 12px;margin-top:auto;}
+.cardtile .actions button{flex:1;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface2);color:var(--text);padding:9px;font-size:.85rem;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;}
+.cardtile .actions button svg{width:15px;height:15px;}
+.cardtile .actions .del{color:var(--danger);}
+.cardtile .actions button:active{transform:scale(.97);}
+
 @media (max-width:760px){
   .summary{grid-template-columns:1fr 1fr;}
   .stat.hero{grid-column:1/-1;}
@@ -287,7 +324,13 @@ textarea{resize:vertical;min-height:62px;}
   </div>
 </header>
 
+<nav class="tabs" id="tabs">
+  <button data-view="subs" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="4" rx="2"/><rect x="3" y="11" width="18" height="4" rx="2"/><rect x="3" y="17" width="12" height="4" rx="2"/></svg>Subscriptions</button>
+  <button data-view="cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 9.5h19"/></svg>Cards</button>
+</nav>
+
 <main>
+  <div id="view-subs">
   <!-- Summary hero -->
   <section class="summary" id="summary"></section>
 
@@ -308,6 +351,19 @@ textarea{resize:vertical;min-height:62px;}
 
   <!-- Grid -->
   <section class="grid" id="grid"></section>
+  </div><!-- /view-subs -->
+
+  <div id="view-cards" hidden>
+    <section class="summary" id="cards-summary"></section>
+    <section class="panels" style="grid-template-columns:1fr;">
+      <div class="card panel">
+        <h2>Card calendar <span class="pill" id="cardsSoonPill">—</span></h2>
+        <div class="upcoming" id="cards-cal"></div>
+      </div>
+    </section>
+    <div class="section-title">Your cards</div>
+    <section class="grid" id="cards-grid"></section>
+  </div><!-- /view-cards -->
 </main>
 
 <button class="fab" id="fab">
@@ -318,6 +374,11 @@ textarea{resize:vertical;min-height:62px;}
 <!-- Entry sheet -->
 <div class="scrim" id="entryScrim">
   <div class="sheet" id="entrySheet"></div>
+</div>
+
+<!-- Card sheet -->
+<div class="scrim" id="cardScrim">
+  <div class="sheet" id="cardSheet"></div>
 </div>
 
 <!-- Settings sheet -->
@@ -380,6 +441,20 @@ const PRESETS = [
   {n:'GitHub', c:'software', cur:'USD'}, {n:'Grammarly', c:'software', cur:'USD'}
 ];
 
+const NETWORKS = {
+  visa:       { label:'Visa',       wordmark:'VISA' },
+  mastercard: { label:'Mastercard', wordmark:'MC'   },
+  amex:       { label:'Amex',       wordmark:'AMEX' },
+  other:      { label:'Other',      wordmark:'CARD' }
+};
+/* Quick-add cards (nickname, issuer, network) */
+const CARD_PRESETS = [
+  {nick:'City Amex Gold',           issuer:'City Bank',           net:'amex'},
+  {nick:'EBL Platinum Visa',        issuer:'Eastern Bank (EBL)',  net:'visa'},
+  {nick:'SCBL Gold Visa',           issuer:'Standard Chartered',  net:'visa'}
+];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
 const THEMES = [
   {id:'aurora',   name:'Aurora',   bar:'linear-gradient(120deg,#6366f1,#8b5cf6,#ec4899)'},
   {id:'midnight', name:'Midnight', bar:'linear-gradient(120deg,#06b6d4,#3b82f6,#8b5cf6)'},
@@ -415,6 +490,23 @@ function normalize(d){
     e.status = ['active','paused','cancelled'].includes(e.status) ? e.status : 'active';
     e.price = Number(e.price)||0;
     e.isTrial = !!e.isTrial;
+    e.cardId = e.cardId || null;
+  });
+  d.cards = Array.isArray(d.cards) ? d.cards : [];
+  d.cards.forEach(c=>{
+    c.id = c.id || uid();
+    c.nickname = c.nickname || 'Card';
+    c.issuer = c.issuer || '';
+    c.network = NETWORKS[c.network] ? c.network : 'other';
+    c.last4 = (c.last4||'').replace(/\D/g,'').slice(0,4);
+    c.statementDay = clampDay(c.statementDay);
+    c.dueDay = clampDay(c.dueDay);
+    c.annualFee = Number(c.annualFee)||0;
+    c.feeMonth = (c.feeMonth>=1 && c.feeMonth<=12) ? Number(c.feeMonth) : null;
+    c.expiryMonth = (c.expiryMonth>=1 && c.expiryMonth<=12) ? Number(c.expiryMonth) : null;
+    c.expiryYear = c.expiryYear ? Number(c.expiryYear) : null;
+    c.creditLimit = Number(c.creditLimit)||0;
+    c.note = c.note || '';
   });
   return d;
 }
@@ -463,6 +555,29 @@ function initials(name){
   return ((p[0]?.[0]||'') + (p[1]?.[0]||'')).toUpperCase() || '•';
 }
 
+/* ---------- Card date math ---------- */
+function clampDay(v){ v=parseInt(v); if(isNaN(v))return null; return Math.min(31,Math.max(1,v)); }
+function daysInMonth(y,m){ return new Date(y,m+1,0).getDate(); }
+function ordinal(n){ const s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+/* next date landing on a given day-of-month, today or later */
+function nextDay(day){
+  if(!day) return null;
+  const t=today0(); let y=t.getFullYear(), m=t.getMonth();
+  let d=new Date(y,m,Math.min(day,daysInMonth(y,m)));
+  if(d<t){ m++; if(m>11){m=0;y++;} d=new Date(y,m,Math.min(day,daysInMonth(y,m))); }
+  return d;
+}
+/* next 1st-of-month for a given month (1-12) */
+function nextMonthStart(month){
+  if(!month) return null;
+  const t=today0(); const mi=month-1; let y=t.getFullYear();
+  if(mi < t.getMonth()) y++;
+  return new Date(y,mi,1);
+}
+/* last calendar day of the expiry month */
+function expiryDate(m,y){ if(!m||!y) return null; return new Date(y,m,0); }
+function subsOnCard(cardId){ return state.entries.filter(e=>e.cardId===cardId && countsToSpend(e)); }
+
 /* =========================================================
    Rendering
    ========================================================= */
@@ -478,6 +593,16 @@ function applyAppearance(){
   if(meta && t){ meta.setAttribute('content', ({aurora:'#7c3aed',midnight:'#0f1730',sunset:'#f43f5e',ocean:'#3b82f6',mint:'#10b981',grape:'#a855f7'})[t.id]); }
 }
 
+let view = 'subs';
+function setView(v){
+  view = v;
+  document.getElementById('view-subs').hidden = v!=='subs';
+  document.getElementById('view-cards').hidden = v!=='cards';
+  document.querySelectorAll('#tabs button').forEach(b=> b.classList.toggle('on', b.dataset.view===v));
+  $('#fab').lastChild.textContent = v==='cards' ? ' Add card' : ' Add';
+  $('#search').placeholder = v==='cards' ? 'Search cards…' : 'Search subscriptions…';
+}
+
 function renderAll(){
   applyAppearance();
   renderSummary();
@@ -485,6 +610,13 @@ function renderAll(){
   renderUpcoming();
   renderChips();
   renderGrid();
+  renderCards();
+}
+
+function renderCards(){
+  renderCardSummary();
+  renderCardCalendar();
+  renderCardGrid();
 }
 
 function renderSummary(){
@@ -632,7 +764,7 @@ function subCard(e){
   card.innerHTML = `
     <div class="top">
       <div class="avatar" style="background:${CATS[e.category].hex}">${initials(e.name)}</div>
-      <div class="meta"><div class="nm">${escapeHtml(e.name)}</div><div class="cat">${CATS[e.category].label}</div></div>
+      <div class="meta"><div class="nm">${escapeHtml(e.name)}</div><div class="cat">${CATS[e.category].label}${(()=>{const c=e.cardId&&state.cards.find(x=>x.id===e.cardId);return c?' · '+escapeHtml(c.nickname):'';})()}</div></div>
     </div>
     <div class="price">
       <b>${priceLabel(e)}</b><span class="cyc">${CYCLES[e.cycle].short}</span>
@@ -666,7 +798,7 @@ function openEntry(id){
   draft = existing ? Object.assign({}, existing) : {
     id:null, name:'', category:'ai', price:'', currency:'USD',
     cycle:'monthly', startDate:new Date().toISOString().slice(0,10),
-    isTrial:false, trialEndDate:'', status:'active', note:''
+    isTrial:false, trialEndDate:'', status:'active', note:'', cardId:null
   };
   renderEntrySheet();
   openScrim('#entryScrim');
@@ -733,6 +865,13 @@ function renderEntrySheet(){
         ${['active','paused','cancelled'].map(v=>`<button data-v="${v}" class="${draft.status===v?'on':''}">${v[0].toUpperCase()+v.slice(1)}</button>`).join('')}
       </div>
     </div>
+    ${state.cards.length?`<div class="field">
+      <label>Paid with <span class="hint">— which card is billed</span></label>
+      <select id="f-card">
+        <option value="">Not linked</option>
+        ${state.cards.map(c=>`<option value="${c.id}" ${draft.cardId===c.id?'selected':''}>${escapeHtml(c.nickname)}${c.last4?' ···· '+c.last4:''}</option>`).join('')}
+      </select>
+    </div>`:''}
     <div class="field">
       <label>Note <span class="hint">— plan, account, anything</span></label>
       <textarea id="f-note" placeholder="e.g. shared family plan, renews on the personal card">${escapeHtml(draft.note)}</textarea>
@@ -776,6 +915,7 @@ function saveEntry(){
   draft.startDate = $('#f-start',s).value;
   draft.trialEndDate = $('#f-trialend',s).value;
   draft.note = $('#f-note',s).value.trim();
+  const cardSel=$('#f-card',s); if(cardSel) draft.cardId=cardSel.value||null;
   if(!draft.name){ toast('Give it a name first'); $('#f-name',s).focus(); return; }
   if(draft.isTrial && !draft.trialEndDate){ toast('Set when the trial ends'); return; }
   if(draft.id){
@@ -799,6 +939,191 @@ function confirmDelete(e){
     <button class="btn danger" id="c-del">Delete</button></div>`;
   $('#c-cancel',s).onclick=closeScrims;
   $('#c-del',s).onclick=()=>{ state.entries=state.entries.filter(x=>x.id!==e.id); saveState(); closeScrims(); renderAll(); toast('Deleted'); };
+  openScrim('#choiceScrim');
+}
+
+/* =========================================================
+   Cards: dashboard + grid
+   ========================================================= */
+function netHex(n){ return {amex:'#1f7ae0',visa:'#2a3aa0',mastercard:'#eb001b',other:'#64748b'}[n]||'#64748b'; }
+function netShort(n){ return {amex:'AX',visa:'V',mastercard:'MC',other:'••'}[n]||'••'; }
+
+function renderCardSummary(){
+  const wrap=$('#cards-summary'); wrap.innerHTML='';
+  const cards=state.cards;
+  const totalFee=cards.reduce((s,c)=>s+(c.annualFee||0),0);
+  const monthlyOnCards=cards.reduce((s,c)=>s+subsOnCard(c.id).reduce((a,e)=>a+monthlyBDT(e),0),0);
+  let next=null,nextCard=null;
+  cards.forEach(c=>{ const d=nextDay(c.dueDay); if(d&&(!next||d<next)){next=d;nextCard=c;} });
+  const hero=el('div','card stat hero');
+  hero.innerHTML=`<div class="label">Annual fees, all cards</div><div class="big">${bdt(totalFee)}</div>
+    <div class="sub">${cards.length} card${cards.length===1?'':'s'}${monthlyOnCards?` • ${bdt(monthlyOnCards)}/mo in subscriptions`:''}</div>`;
+  const due=el('div','card stat small');
+  if(next){ const diff=daysBetween(today0(),next);
+    due.innerHTML=`<div class="label">Next payment due</div><div class="big">${diff===0?'Today':diff===1?'1 day':diff+' days'}</div><div class="sub">${escapeHtml(nextCard.nickname)} • ${fmtDate(next)}</div>`; }
+  else due.innerHTML=`<div class="label">Next payment due</div><div class="big">—</div><div class="sub">add a due day</div>`;
+  const cnt=el('div','card stat small');
+  const expSoon=cards.filter(c=>{const d=expiryDate(c.expiryMonth,c.expiryYear);if(!d)return false;const diff=daysBetween(today0(),d);return diff>=0&&diff<=60;}).length;
+  cnt.innerHTML=`<div class="label">Cards</div><div class="big">${cards.length}</div><div class="sub">${expSoon} expiring soon</div>`;
+  wrap.append(hero,due,cnt);
+}
+
+function renderCardCalendar(){
+  const box=$('#cards-cal'); box.innerHTML='';
+  const evs=[];
+  state.cards.forEach(c=>{
+    const due=nextDay(c.dueDay); if(due) evs.push({card:c,date:due,label:'Payment due'});
+    if(c.feeMonth){ const f=nextMonthStart(c.feeMonth); if(f) evs.push({card:c,date:f,label:'Annual fee '+bdt(c.annualFee)}); }
+    const exp=expiryDate(c.expiryMonth,c.expiryYear); if(exp) evs.push({card:c,date:exp,label:'Card expires'});
+  });
+  evs.sort((a,b)=>a.date-b.date);
+  const soonN=evs.filter(e=>{const d=daysBetween(today0(),e.date);return d>=0&&d<=state.settings.dueSoonDays;}).length;
+  const pill=$('#cardsSoonPill');
+  if(soonN){pill.textContent=`${soonN} in ${state.settings.dueSoonDays}d`;pill.classList.remove('zero');}
+  else{pill.textContent='all clear';pill.classList.add('zero');}
+  if(!evs.length){ box.append(el('div','up-item',`<div class="meta" style="text-align:center;width:100%;color:var(--muted);font-size:.86rem">Add a card with dates to see what's coming up.</div>`)); return; }
+  evs.slice(0,6).forEach(ev=>{
+    const diff=daysBetween(today0(),ev.date);
+    const soon=diff>=0&&diff<=state.settings.dueSoonDays;
+    const when=diff<0?'was '+fmtDate(ev.date):diff===0?'today':diff===1?'tomorrow':`in ${diff} days`;
+    const it=el('div','up-item'+(soon?' soon':''));
+    it.innerHTML=`<div class="avatar" style="background:${netHex(ev.card.network)}">${netShort(ev.card.network)}</div>
+      <div class="meta"><div class="nm">${escapeHtml(ev.card.nickname)} · ${ev.label}</div><div class="dt">${when} · ${fmtDate(ev.date)}</div></div>`;
+    box.append(it);
+  });
+}
+
+function visibleCards(){
+  let list=state.cards.slice();
+  if(query){ const q=query.toLowerCase(); list=list.filter(c=>c.nickname.toLowerCase().includes(q)||c.issuer.toLowerCase().includes(q)||(c.last4||'').includes(q)); }
+  return list;
+}
+function renderCardGrid(){
+  const grid=$('#cards-grid'); grid.innerHTML='';
+  const list=visibleCards();
+  if(!list.length){
+    const e=el('div','empty');
+    const first=state.cards.length===0;
+    e.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 9.5h19"/></svg>
+      <h3>${first?'No cards yet':'Nothing matches'}</h3>
+      <p>${first?'Add a card to track due dates, annual fees and expiry.':'Try clearing the search.'}</p>`;
+    grid.append(e);
+    if(first){
+      const b=el('button','btn primary'); b.style.maxWidth='260px'; b.style.margin='0 auto 16px'; b.textContent='Add card'; b.onclick=()=>openCard(); e.append(b);
+      const bar=el('div','presetbar'); bar.style.justifyContent='center'; bar.style.flexWrap='wrap';
+      CARD_PRESETS.forEach((p,i)=>{ const btn=el('button','preset'); btn.innerHTML=`<span class="av" style="background:${netHex(p.net)}">${netShort(p.net)}</span>${escapeHtml(p.nick)}`; btn.onclick=()=>openCard(null,i); bar.append(btn); });
+      e.append(bar);
+    }
+    return;
+  }
+  list.forEach(c=>grid.append(cardTile(c)));
+}
+
+function cardTile(c){
+  const wrap=el('div','card cardtile');
+  const num=c.last4?('•••• •••• •••• '+c.last4):'•••• •••• •••• ••••';
+  const exp=(c.expiryMonth&&c.expiryYear)?String(c.expiryMonth).padStart(2,'0')+'/'+String(c.expiryYear).slice(-2):'––/––';
+  const wm=c.network==='mastercard'
+    ? `<span class="cc-net mc"><span class="mcd r"></span><span class="mcd y"></span></span>`
+    : `<span class="cc-net">${NETWORKS[c.network].wordmark}</span>`;
+  const face=`<div class="cc" data-net="${c.network}">
+    <div class="cc-top"><span class="cc-nick">${escapeHtml(c.nickname)}</span>${wm}</div>
+    <div class="cc-chip"></div>
+    <div class="cc-num">${num}</div>
+    <div class="cc-bot"><div><small>Issuer</small><b>${escapeHtml(c.issuer||'—')}</b></div><div style="text-align:right"><small>Expires</small><b>${exp}</b></div></div>
+  </div>`;
+  const due=nextDay(c.dueDay), expd=expiryDate(c.expiryMonth,c.expiryYear);
+  const badges=[];
+  if(c.dueDay){ const diff=daysBetween(today0(),due); const soon=diff>=0&&diff<=state.settings.dueSoonDays;
+    badges.push(`<span class="badge next${soon?' soon':''}">Due ${ordinal(c.dueDay)} · ${diff===0?'today':diff===1?'tomorrow':'in '+diff+'d'}</span>`); }
+  if(c.statementDay) badges.push(`<span class="badge next">Statement ${ordinal(c.statementDay)}</span>`);
+  if(c.annualFee) badges.push(`<span class="badge next">Fee ${bdt(c.annualFee)}${c.feeMonth?' · '+MONTHS[c.feeMonth-1]:''}</span>`);
+  if(expd){ const diff=daysBetween(today0(),expd); const cls=diff<0?'danger':(diff<=60?'warn':'next');
+    badges.push(`<span class="badge ${cls}">${diff<0?'Expired':'Expires'} ${String(c.expiryMonth).padStart(2,'0')}/${String(c.expiryYear).slice(-2)}</span>`); }
+  if(c.creditLimit) badges.push(`<span class="badge next">Limit ${bdt(c.creditLimit)}</span>`);
+  const subs=subsOnCard(c.id);
+  if(subs.length){ const mo=subs.reduce((a,e)=>a+monthlyBDT(e),0); badges.push(`<span class="badge link">${subs.length} sub${subs.length===1?'':'s'} · ${bdt(mo)}/mo</span>`); }
+  wrap.innerHTML=face+`<div class="cc-details">${badges.join('')}</div>`+
+    (c.note?`<div style="padding:10px 12px 0;font-size:.82rem;color:var(--muted);line-height:1.4">${escapeHtml(c.note)}</div>`:'')+
+    `<div class="actions">
+       <button class="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</button>
+       <button class="del"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Delete</button>
+     </div>`;
+  wrap.querySelector('.edit').onclick=()=>openCard(c.id);
+  wrap.querySelector('.del').onclick=()=>confirmDeleteCard(c);
+  return wrap;
+}
+
+/* ---------- Card sheet ---------- */
+let cardDraft=null;
+function openCard(id, presetIndex){
+  const ex=id?state.cards.find(c=>c.id===id):null;
+  cardDraft = ex ? Object.assign({},ex) : {id:null,nickname:'',issuer:'',network:'visa',last4:'',statementDay:'',dueDay:'',annualFee:'',feeMonth:null,expiryMonth:null,expiryYear:'',creditLimit:'',note:''};
+  if(presetIndex!=null){ const p=CARD_PRESETS[presetIndex]; cardDraft.nickname=p.nick; cardDraft.issuer=p.issuer; cardDraft.network=p.net; }
+  renderCardSheet(); openScrim('#cardScrim');
+}
+function renderCardSheet(){
+  const s=$('#cardSheet'), d=cardDraft;
+  const monthOpts=(sel)=>`<option value="">—</option>`+MONTHS.map((m,i)=>`<option value="${i+1}" ${sel==i+1?'selected':''}>${m}</option>`).join('');
+  const presetBar=d.id?'':`<div class="mini-label">Quick add <span class="hint" style="font-weight:400">tap to prefill</span></div>
+    <div class="presetbar">${CARD_PRESETS.map((p,i)=>`<button class="preset" data-i="${i}"><span class="av" style="background:${netHex(p.net)}">${netShort(p.net)}</span>${escapeHtml(p.nick)}</button>`).join('')}</div>`;
+  s.innerHTML=`<div class="grab"></div>
+    <h2>${d.id?'Edit card':'Add card'}</h2>
+    <p class="desc">${d.id?'Update the details and save.':'Only the last 4 digits are stored — never the full number or CVV.'}</p>
+    ${presetBar}
+    <div class="field"><label>Card name</label><input type="text" id="k-nick" placeholder="e.g. City Amex Gold" value="${escapeHtml(d.nickname)}"></div>
+    <div class="field"><label>Network</label>
+      <div class="seg" id="k-net">${Object.entries(NETWORKS).map(([k,v])=>`<button data-v="${k}" class="${d.network===k?'on':''}">${v.label}</button>`).join('')}</div></div>
+    <div class="two">
+      <div class="field"><label>Issuer / bank</label><input type="text" id="k-issuer" placeholder="e.g. City Bank" value="${escapeHtml(d.issuer)}"></div>
+      <div class="field"><label>Last 4 digits</label><input type="text" id="k-last4" inputmode="numeric" maxlength="4" placeholder="1234" value="${escapeHtml(d.last4)}"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label>Statement day</label><input type="number" id="k-stmt" inputmode="numeric" min="1" max="31" placeholder="1–31" value="${d.statementDay||''}"></div>
+      <div class="field"><label>Payment due day</label><input type="number" id="k-due" inputmode="numeric" min="1" max="31" placeholder="1–31" value="${d.dueDay||''}"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label>Annual fee <span class="hint">৳</span></label><input type="number" id="k-fee" inputmode="decimal" min="0" placeholder="0" value="${d.annualFee||''}"></div>
+      <div class="field"><label>Fee charged in</label><select id="k-feemonth">${monthOpts(d.feeMonth)}</select></div>
+    </div>
+    <div class="two">
+      <div class="field"><label>Expiry month</label><select id="k-expm">${monthOpts(d.expiryMonth)}</select></div>
+      <div class="field"><label>Expiry year</label><input type="number" id="k-expy" inputmode="numeric" min="2020" max="2099" placeholder="2027" value="${d.expiryYear||''}"></div>
+    </div>
+    <div class="field"><label>Credit limit <span class="hint">৳ — optional</span></label><input type="number" id="k-limit" inputmode="decimal" min="0" placeholder="0" value="${d.creditLimit||''}"></div>
+    <div class="field"><label>Note <span class="hint">— optional</span></label><textarea id="k-note" placeholder="e.g. reward points card, autopay is on">${escapeHtml(d.note)}</textarea></div>
+    <div class="btn-row"><button class="btn ghost" id="k-cancel">Cancel</button><button class="btn primary" id="k-save">${d.id?'Save changes':'Add card'}</button></div>`;
+  if(!d.id) s.querySelectorAll('.preset').forEach(b=> b.onclick=()=>{ const p=CARD_PRESETS[+b.dataset.i]; cardDraft.nickname=p.nick; cardDraft.issuer=p.issuer; cardDraft.network=p.net; renderCardSheet(); setTimeout(()=>$('#k-last4')?.focus(),50); });
+  bindSeg(s,'#k-net',v=>cardDraft.network=v);
+  $('#k-cancel',s).onclick=closeScrims;
+  $('#k-save',s).onclick=saveCard;
+}
+function saveCard(){
+  const s=$('#cardSheet'), d=cardDraft;
+  d.nickname=$('#k-nick',s).value.trim();
+  d.issuer=$('#k-issuer',s).value.trim();
+  d.last4=$('#k-last4',s).value.replace(/\D/g,'').slice(0,4);
+  d.statementDay=clampDay($('#k-stmt',s).value);
+  d.dueDay=clampDay($('#k-due',s).value);
+  d.annualFee=parseFloat($('#k-fee',s).value)||0;
+  d.feeMonth=parseInt($('#k-feemonth',s).value)||null;
+  d.expiryMonth=parseInt($('#k-expm',s).value)||null;
+  d.expiryYear=parseInt($('#k-expy',s).value)||null;
+  d.creditLimit=parseFloat($('#k-limit',s).value)||0;
+  d.note=$('#k-note',s).value.trim();
+  if(!d.nickname){ toast('Give the card a name'); $('#k-nick',s).focus(); return; }
+  if(d.id){ const i=state.cards.findIndex(c=>c.id===d.id); if(i>=0) state.cards[i]=Object.assign(state.cards[i],d); toast('Saved'); }
+  else{ d.id=uid(); state.cards.push(Object.assign({},d)); toast(d.nickname+' added'); }
+  saveState(); closeScrims(); renderAll();
+}
+function confirmDeleteCard(c){
+  const s=$('#choiceSheet');
+  const linked=state.entries.filter(e=>e.cardId===c.id).length;
+  s.innerHTML=`<div class="grab"></div><h2>Delete ${escapeHtml(c.nickname)}?</h2>
+    <p class="desc">This removes the card permanently.${linked?` ${linked} subscription${linked===1?'':'s'} linked to it will be kept, just unlinked.`:''}</p>
+    <div class="btn-row"><button class="btn ghost" id="kc-cancel">Keep it</button><button class="btn danger" id="kc-del">Delete</button></div>`;
+  $('#kc-cancel',s).onclick=closeScrims;
+  $('#kc-del',s).onclick=()=>{ state.entries.forEach(e=>{ if(e.cardId===c.id) e.cardId=null; }); state.cards=state.cards.filter(x=>x.id!==c.id); saveState(); closeScrims(); renderAll(); toast('Deleted'); };
   openScrim('#choiceScrim');
 }
 
@@ -866,7 +1191,7 @@ function openSettings(){
    ========================================================= */
 function backupBlob(){
   const payload = { app:'subscription-hub', version:1, exportedAt:new Date().toISOString(),
-    settings:state.settings, entries:state.entries };
+    settings:state.settings, entries:state.entries, cards:state.cards };
   return new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
 }
 function backupName(){ return `subscription-hub-backup-${new Date().toISOString().slice(0,10)}.json`; }
@@ -916,12 +1241,15 @@ function askImportMode(data, incoming){
   openScrim('#choiceScrim');
 }
 function doImport(data, incoming, replace){
-  const clean = normalize({settings:data.settings||state.settings, entries:incoming});
-  if(replace){ state.entries = clean.entries; }
+  const clean = normalize({settings:data.settings||state.settings, entries:incoming, cards:data.cards||[]});
+  if(replace){ state.entries = clean.entries; state.cards = clean.cards; }
   else{
     const byId = new Map(state.entries.map(e=>[e.id,e]));
     clean.entries.forEach(e=>{ byId.set(e.id, e); });
     state.entries = Array.from(byId.values());
+    const cById = new Map(state.cards.map(c=>[c.id,c]));
+    clean.cards.forEach(c=>{ cById.set(c.id, c); });
+    state.cards = Array.from(cById.values());
   }
   if(data.settings){ state.settings = Object.assign(defaultSettings(), data.settings); }
   saveState(); closeScrims(); renderAll();
@@ -939,11 +1267,13 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeScrims(); })
 let toastT;
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
 
-$('#fab').onclick=()=>openEntry();
+$('#fab').onclick=()=> view==='cards' ? openCard() : openEntry();
 $('#btnSettings').onclick=openSettings;
-$('#search').addEventListener('input', e=>{ query=e.target.value.trim(); renderGrid(); });
+$('#search').addEventListener('input', e=>{ query=e.target.value.trim(); renderGrid(); renderCardGrid(); });
+document.querySelectorAll('#tabs button').forEach(b=> b.onclick=()=>{ query=''; $('#search').value=''; setView(b.dataset.view); renderGrid(); renderCardGrid(); });
 
 renderAll();
+setView('subs');
 
 /* service worker */
 if('serviceWorker' in navigator){
